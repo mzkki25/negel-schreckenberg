@@ -6,32 +6,25 @@ import numpy as np
 def negel_schreckenberg(M, prob, num_of_car, vmax, tmax):
     # inisiasi jumlah kendaraan 
     initial = [0] * num_of_car + [-1] * (M - num_of_car)
-    # membuat iterasi berdasarkan jumlah kendaraan
     iteratons = [initial]
-    # membuat iterasi perulangan berdasarkan waktu maksimum
+
     for t in range(tmax):
-        # inisiasi iterasi sebelum dan sesudah kendaraan bergerak
         previous, current = iteratons[-1], [-1] * M
-        # membuat perulangan berdasarkan nilai M (panjang jalan)
         for x in range(M):
-            # jika nilai iterasi sebelumnya pada indeks x lebih besar -1 maka nilai kecepatan ke i adalah nilai iterasi sebelumnya pada indeks x
             if previous[x] > -1:
                 vi = previous[x]
                 d = 1
                 # membuat perulangan berdasarkan nilai M (panjang jalan) dengan kondisi jika nilai x + d di modulo dengan M lebih kecil dari 0 maka nilai d akan bertambah
                 while previous[(x + d) % M] < 0:
                     d += 1
-                # inisiasi kecepatan minimum dari nilai d, nilai vi dan nilai vmax
                 vTemp = min(vi + 1, d - 1, vmax)
                 # penetuan nilai kecepatan baru dengan menggunakan rumus v = vTemp - 1 jika nilai random lebih kecil dari probabilitas
                 if rd.uniform(0, 1) < prob:
                     vTemp = max(vTemp - 1, 0)
                 # nilai kecepatan pada indeks x adalah nilai vTemp dan disimpan didalam list current
                 current[(x + vTemp) % M] = vTemp
-        # iterasi sebelumnya adalah iterasi saat ini
         iteratons.append(current)
     
-    # membuat plot
     a = np.zeros(shape=(tmax, M))
     # membuat perulangan berdasarkan nilai tmax
     for i in range(M):
@@ -43,7 +36,6 @@ def negel_schreckenberg(M, prob, num_of_car, vmax, tmax):
                 a[j][i] = 0
     return a
 
-# membuat main function untuk menjalankan fungsi negel schreckenberg dan membuat plot grafik dengan menggunakan matplotlib
 def main():
     M = 100
     p = 0.3
